@@ -11,8 +11,10 @@ export default async () => {
   
   console.log(app)
   
+  const targetContainer = new PIXI.Container()
   const container = new PIXI.Container()
   stage.addChild(container)
+  stage.addChild(targetContainer)
 
   loader.add({
     name: 'logo',
@@ -20,16 +22,23 @@ export default async () => {
   })
   loader.load((loader, resources) => {
     const a = new PIXI.Sprite(resources["logo"].texture)
-    a.anchor.set(0.5);
-    a.scale.set(0.2);
+    a.anchor.set(0.5)
+    a.scale.set(0.2)
+    
+    const b = new PIXI.Sprite(resources["logo"].texture)
+    b.anchor.set(0.5)
+    b.scale.set(0.2)
+    b.hitArea = new PIXI.Rectangle(0, 0, 100, 100)
+    
     container.addChild(a)
     container.x = app.screen.width / 2
     container.y = app.screen.height / 2
+    
+    targetContainer.addChild(b)
+    targetContainer.x = 25
+    targetContainer.y = 25
   })
 
-  console.log('resource', loader.resources)
-  console.log('TextureCache', PIXI.utils.TextureCache)
-  // const logo = new PIXI.Sprite()
 
   app.ticker.add((delta) => {
     container.rotation -= 0.01 * delta
