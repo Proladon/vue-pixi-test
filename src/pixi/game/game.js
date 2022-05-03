@@ -4,10 +4,10 @@ import * as projection from 'pixi-projection'
 export default async () => {
   const app = new PIXI.Application({
     width: 500, height: 500, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
-  });
+  })
   const stage = app.stage
   const loader = app.loader
-  document.body.appendChild(app.view);
+  document.getElementById('game').appendChild(app.view)
   
   const targetContainer = new PIXI.Container()
   const container = new PIXI.Container()
@@ -45,21 +45,35 @@ export default async () => {
 
     targetContainer.addChild(bunny)
   })
-
-
-  app.ticker.add((delta) => {
-    targetContainer.rotation -= 0.03 * delta
+  let score = 0
+  const scoreText = new PIXI.Text('Score: 0')
+  scoreText.style = new PIXI.TextStyle({
+    fill: '0xffffff',
   })
+  stage.addChild(scoreText)
+  
+  const updateScore = () => {
+    score += 1
+    scoreText.text = `Score: ${score}`
+    scoreText.x = app.screen.width - scoreText.width
+  }
+  updateScore()
+
+  
 
   const reSpawnTarget = (step) => {
     targetContainer.x = (Math.floor(Math.random()*10) * app.renderer.width/10) || step
     targetContainer.y = (Math.floor(Math.random()*10) * app.renderer.height/10) || step
-    console.log(targetContainer.x, targetContainer.y)
+    updateScore()
   }
   const checkHit = () => {
     if(container.x === targetContainer.x && container.y === targetContainer.y) return true
     return false
   }
+
+  app.ticker.add((delta) => {
+    targetContainer.rotation -= 0.03 * delta
+  })
   
   window.addEventListener('keydown', (e) => {
     const step = 25
@@ -83,5 +97,4 @@ export default async () => {
     }
     if(checkHit()) reSpawnTarget(step)
   })
-
 }

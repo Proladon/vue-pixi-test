@@ -1,14 +1,13 @@
+<template>
+  <game />
+</template>
+
 <script setup>
 import { onMounted } from 'vue';
-import app from './pixi/app.js'
-onMounted(async() => {
-  await app()
-})
+import game from './pixi/game/game.vue';
 </script>
 
-<template>
 
-</template>
 
 <style>
 #app {
