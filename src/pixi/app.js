@@ -1,54 +1,50 @@
 import * as PIXI from 'pixi.js'
-import * as projection from 'pixi-projection';
 
 export default async () => {
   const app = new PIXI.Application({
-    width: 800, height: 600, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
+    width: 500, height: 500, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
   });
+  const stage = app.stage
+  const loader = app.loader
+  const key = {}
   document.body.appendChild(app.view);
-
-  const container = new PIXI.Container();
-
-  container.scale.y = 0.5
-
-  const isometryPlane = new PIXI.Graphics();
-  isometryPlane.rotation = Math.PI / 4;
-  container.addChild(isometryPlane);
-
-  isometryPlane.lineStyle(2, 0xffffff);
-  for (let i = -100; i <= 100; i += 50) {
-      isometryPlane.moveTo(-150, i);
-      isometryPlane.lineTo(150, i);
-      isometryPlane.moveTo(i, -150);
-      isometryPlane.lineTo(i, 150);
-  }
-
-  app.stage.addChild(container);
-
-  // Create a new texture
-  const texture = PIXI.Texture.from('src/assets/logo.png');
   
-  const avatar = new PIXI.Sprite.from('http://anata.me/img/avatar.jpg');
-  // 圖片寬高縮放0.5
-  const a = new projection.Sprite2d(texture)
-  a.anchor.set(0.5, 1.0);
-  a.proj.affine = projection.AFFINE.AXIS_X
-  container.addChild(a);
+  console.log(app)
+  
+  const container = new PIXI.Container()
+  stage.addChild(container)
 
+  loader.add({
+    name: 'logo',
+    url: 'src/assets/logo.png',
+  })
+  loader.load((loader, resources) => {
+    const a = new PIXI.Sprite(resources["logo"].texture)
+    a.anchor.set(0.5);
+    a.scale.set(0.2);
+    container.addChild(a)
+    container.x = app.screen.width / 2
+    container.y = app.screen.height / 2
+  })
 
-  // Move container to the center
-  container.x = app.screen.width / 2;
-  container.y = app.screen.height / 2;
+  console.log('resource', loader.resources)
+  console.log('TextureCache', PIXI.utils.TextureCache)
+  // const logo = new PIXI.Sprite()
 
-  // Center bunny sprite in local container coordinates
-  container.pivot.x = container.width / 2;
-  container.pivot.y = container.height / 2;
-
-  // Listen for animate update
   app.ticker.add((delta) => {
-    // rotate the container!
-    // use delta to create frame-independent transform
-    // container.rotation -= 0.01 * delta;
-  });
-
+    container.rotation -= 0.01 * delta
+  })
+  
+  window.addEventListener('keydown', (e) => {
+    const step = 25
+    const max = 475
+    const min = 25
+    if(e.code === 'ArrowLeft' && container.x > min) container.x = container.x - step
+    if(e.code === 'ArrowRight' && container.x < max) container.x = container.x + step
+    if(e.code === 'ArrowUp' && container.y > min) container.y = container.y - step
+    if(e.code === 'ArrowDown' && container.y < max) container.y = container.y + step
+  })
+  window.addEventListener('keyup', (e) => {
+    // if(e.code = 'ArrowLeft') container.x = container.x - 10
+  })
 }
