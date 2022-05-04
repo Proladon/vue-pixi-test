@@ -67,15 +67,15 @@ export default async () => {
     const min = 25
     if(e.code === 'ArrowLeft' && container.x > min) {
       container.x = container.x - step
-      container.rotation = 1.57
+      container.rotation = Math.PI * 90
     }
     if(e.code === 'ArrowRight' && container.x < max) {
       container.x = container.x + step
-      container.rotation = 4.71
+      container.rotation = Math.PI * 180
     }
     if(e.code === 'ArrowUp' && container.y > min) {
       container.y = container.y - step
-      container.rotation = 3.14
+      container.rotation = Math.PI * 270
     }
     if(e.code === 'ArrowDown' && container.y < max) {
       container.y = container.y + step

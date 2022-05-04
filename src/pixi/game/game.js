@@ -33,7 +33,10 @@ export default async () => {
     // b.scale.set(1)
     const bunny = new projection.Sprite2d(resources["bunny"].texture)
     bunny.anchor.set(0.5)
+    bunny.interactive = true
+    bunny.buttonMode = true
     bunny.scale.set(0.8)
+    bunny.on('pointerdown', () => alert('hi'))
     bunny.proj.affine = projection.AFFINE.AXIS_X
     
     container.addChild(a)
@@ -59,8 +62,6 @@ export default async () => {
   }
   updateScore()
 
-  
-
   const reSpawnTarget = (step) => {
     targetContainer.x = (Math.floor(Math.random()*10) * app.renderer.width/10) || step
     targetContainer.y = (Math.floor(Math.random()*10) * app.renderer.height/10) || step
@@ -81,15 +82,15 @@ export default async () => {
     const min = 25
     if(e.code === 'ArrowLeft' && container.x > min) {
       container.x = container.x - step
-      container.rotation = 1.57
+      container.rotation = (Math.PI / 180) * 90
     }
     if(e.code === 'ArrowRight' && container.x < max) {
       container.x = container.x + step
-      container.rotation = 4.71
+      container.rotation = (Math.PI / 180) * 270
     }
     if(e.code === 'ArrowUp' && container.y > min) {
       container.y = container.y - step
-      container.rotation = 3.14
+      container.rotation = (Math.PI / 180) * 180
     }
     if(e.code === 'ArrowDown' && container.y < max) {
       container.y = container.y + step
