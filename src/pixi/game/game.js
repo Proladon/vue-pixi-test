@@ -29,8 +29,7 @@ export default async () => {
     a.anchor.set(0.5)
     a.scale.set(0.2)
     
-    const b = new PIXI.Sprite(resources["bunny"].texture)
-    // b.scale.set(1)
+    // const b = new PIXI.Sprite(resources["bunny"].texture)
     const bunny = new projection.Sprite2d(resources["bunny"].texture)
     bunny.anchor.set(0.5)
     bunny.interactive = true
@@ -50,6 +49,7 @@ export default async () => {
   })
   let score = 0
   const scoreText = new PIXI.Text('Score: 0')
+  scoreText.x = app.screen.width - scoreText.width
   scoreText.style = new PIXI.TextStyle({
     fill: '0xffffff',
   })
@@ -60,7 +60,6 @@ export default async () => {
     scoreText.text = `Score: ${score}`
     scoreText.x = app.screen.width - scoreText.width
   }
-  updateScore()
 
   const reSpawnTarget = (step) => {
     targetContainer.x = (Math.floor(Math.random()*10) * app.renderer.width/10) || step
